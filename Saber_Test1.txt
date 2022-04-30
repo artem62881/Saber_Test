@@ -1,0 +1,82 @@
+void Serialize(FileStream& s)
+{
+	string Output;
+  
+        unsigned int Num = 0;
+        ListNode* Current = Head;
+        map<ListNode*, unsigned int> ListIndices_Map;
+        
+        while (Current)
+        {
+        	ListIndices_Map.insert(pair<ListNode*, unsigned int> (Current, Num));
+            	Current = Current->Next;
+        	Num++;
+        }
+
+        Current = Head;
+        while (Current)
+        {
+            	Output.append(to_string(ListIndices_Map[Current->Rand]) + '|' + Current->Data + '|');
+            	Current = Current->Next;
+        }   
+        
+        s.write(Output);
+}
+
+void Deserialize(const FileStream& s)
+{
+        string Input = s.read();
+
+	vector<unsigned int> RandIndices_Vector;
+
+	string StringPiece;
+	stringstream Stream(Input);
+        unsigned int Num = 0;
+	while (getline(Stream, StringPiece, '|'))
+	{
+		if (Num % 2 == 0)
+		{
+			RandIndices_Vector.push_back(stoi(StringPiece));
+		}
+		else
+		{
+			ListNode* Current = new ListNode;
+			Current->Data = StringPiece;
+
+			if (Count != 0)
+			{
+				Tail->Next = Current;
+				Current->Prev = Tail;
+			}
+			else
+			{
+				Head = Current;
+			}
+
+			Current->Rand = NULL;
+			Tail = Current;
+			Count++;
+		}
+            	++Num;
+	}
+  
+        map<unsigned int, ListNode*> ListIndices_Map;
+
+        Num = 0;
+        ListNode* Current = Head;
+        while (Current)
+        {
+        	ListIndices_Map.insert(pair<unsigned int, ListNode*>(Num, Current));
+        	Current = Current->Next;
+        	Num++;
+        }
+
+        Current = Head;
+        Num = 0;
+        while (Current)
+        {
+        	Current->Rand = ListIndices_Map[RandIndices_Vector[Num]];
+		Current = Current->Next;
+		Num++;
+        }
+}
