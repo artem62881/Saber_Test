@@ -120,13 +120,11 @@ public:
             Num++;
         }
 
-        Current = Head;
         Num = 0;
-        while (Current)
+        for (unsigned int i : RandIndices_Vector)
         {
-            Current->Rand = ListIndices_Map[RandIndices_Vector[Num]];
-			Current = Current->Next;
-			Num++;
+            ListIndices_Map[Num]->Rand = ListIndices_Map[i];
+            Num++;
         }
 
         PrintList();
